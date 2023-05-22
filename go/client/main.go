@@ -11,6 +11,7 @@ import (
 	"github.com/ymmt2005/grpc-tutorial/go/deepthought"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/status"
 )
 
@@ -32,7 +33,11 @@ func subMain() error {
 
 	// grpc.WithInsecure() を指定することで、TLS ではなく平文で接続
 	// 通信内容が保護できないし、不正なサーバーに接続しても検出できないので本当はダメ
-	conn, err := grpc.Dial(addr, grpc.WithInsecure())
+	// see https://pkg.go.dev/google.golang.org/grpc/keepalive#ClientParameters
+	kp := keepalive.ClientParameters{
+		Time: 1 * time.Minute,
+	}
+	conn, err := grpc.Dial(addr, grpc.WithInsecure(), grpc.WithKeepaliveParams(kp))
 	if err != nil {
 		return err
 	}
