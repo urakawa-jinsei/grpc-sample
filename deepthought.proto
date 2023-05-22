@@ -4,6 +4,7 @@ option go_package = "github.com/ymmt2005/grpc-tutorial/go/deepthought";
 option java_package = "io.github.ymmt2005.grpc_tutorial.deepthought";
 
 message BootRequest {
+  bool silent = 1;
 }
 message BootResponse {
   string message = 1;
@@ -14,7 +15,10 @@ message InferRequest {
 }
 message InferResponse {
   sint64 answer = 1;
-  repeated string description = 2;
+  // repeated string description = 2;
+  // description フィールドは廃止して reserved に
+  reserved 2;
+  reserved "description";
 }
 
 service Compute {

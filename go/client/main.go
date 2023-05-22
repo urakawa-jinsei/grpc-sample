@@ -15,12 +15,11 @@ import (
 )
 
 func main() {
-	// err := superMain()
-	// if err != nil {
-	// 	fmt.Fprintln(os.Stderr, err)
-	// 	os.Exit(1)
-	// }
-	superMain()
+	err := subMain()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }
 
 func subMain() error {
@@ -79,45 +78,4 @@ func subMain() error {
 	}
 
 	return nil
-}
-
-func superMain() {
-	if len(os.Args) != 2 {
-		fmt.Println("usage: client HOST:PORT")
-		return
-	}
-
-	// コマンドライン引数で渡されたアドレスに接続
-	addr := os.Args[1]
-
-	// grpc.WithInsecure() を指定することで、TLS ではなく平文で接続
-	// 通信内容が保護できないし、不正なサーバーに接続しても検出できないので本当はダメ
-	conn, err := grpc.Dial(addr, grpc.WithInsecure())
-	if err != nil {
-		fmt.Println("Failed to connect:", err)
-		return
-	}
-	// 使い終わったら Close しないとコネクションがリークします
-	defer conn.Close()
-
-	// 自動生成された RPC クライアントを conn から作成
-	cc := deepthought.NewComputeClient(conn)
-
-	// Infer リクエストの作成
-	req := &deepthought.InferRequest{
-		Query: "Life",
-	}
-
-	// コンテキストの設定
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	// Infer RPC 呼び出しコードを実行
-	resp, err := cc.Infer(ctx, req)
-	if err != nil {
-		fmt.Println("Infer request failed:", err)
-		return
-	}
-	fmt.Printf("Answer: %d\n", resp.Answer)
-	fmt.Println("Description:", resp.Description)
 }

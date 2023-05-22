@@ -56,8 +56,7 @@ func (s *Server) Infer(ctx context.Context, req *deepthought.InferRequest) (*dee
 	if !ok || time.Until(deadline) > 750*time.Millisecond {
 		time.Sleep(750 * time.Millisecond)
 		return &deepthought.InferResponse{
-			Answer:      42,
-			Description: []string{"I checked it"},
+			Answer: 42,
 		}, nil
 	}
 
