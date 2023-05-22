@@ -1,6 +1,6 @@
 # gRPC チュートリアル（[こちら](https://github.com/ymmt2005/grpc-tutorial)の手順通りに進めました。）
 
-> 本資料は 2021 年にサイボウズ社内の研修用に作成したものです。
+> [https://github.com/ymmt2005/grpc-tutorial](https://github.com/ymmt2005/grpc-tutorial)
 
 [解説動画](https://youtu.be/YXSTcLi38UE)があるのでこちらを視ながら学んでください。
 
