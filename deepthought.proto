@@ -3,11 +3,14 @@ package deepthought;
 option go_package = "github.com/ymmt2005/grpc-tutorial/go/deepthought";
 option java_package = "io.github.ymmt2005.grpc_tutorial.deepthought";
 
+import "google/protobuf/timestamp.proto";  // タイムスタンプの定義をインポート
+
 message BootRequest {
   bool silent = 1;
 }
 message BootResponse {
   string message = 1;
+  google.protobuf.Timestamp timestamp = 2;  // タイムスタンプフィールドを追加
 }
 
 message InferRequest {

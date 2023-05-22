@@ -5,6 +5,7 @@ import (
 	"time"
 
 	// protoc で自動生成されたパッケージ
+	"github.com/golang/protobuf/ptypes"
 	"github.com/ymmt2005/grpc-tutorial/go/deepthought"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -31,8 +32,12 @@ func (s *Server) Boot(req *deepthought.BootRequest, stream deepthought.Compute_B
 		case <-time.After(1 * time.Second):
 		}
 
+		currentTime := time.Now()
+		timestamp, _ := ptypes.TimestampProto(currentTime)
+
 		if err := stream.Send(&deepthought.BootResponse{
-			Message: "I THINK THEREFORE I AM.",
+			Message:   "I THINK THEREFORE I AM.",
+			Timestamp: timestamp,
 		}); err != nil {
 			return err
 		}
