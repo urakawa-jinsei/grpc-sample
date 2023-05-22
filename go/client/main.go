@@ -11,6 +11,7 @@ import (
 	"github.com/ymmt2005/grpc-tutorial/go/deepthought"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	healthgrpc "google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/status"
 )
@@ -43,6 +44,9 @@ func subMain() error {
 	}
 	// 使い終わったら Close しないとコネクションがリークします
 	defer conn.Close()
+
+	// ヘルスチェッククライアントを作成
+	healthClient := healthgrpc.NewHealthClient(conn)
 
 	// 自動生成された RPC クライアントを conn から作成
 	// gRPC は HTTP/2 の stream を用いるため、複数のクライアントが同一の conn を使えます。
@@ -83,6 +87,15 @@ func subMain() error {
 		fmt.Printf("Boot: %s\n", resp.Message)
 		fmt.Printf("Boot: %s\n", resp.Timestamp)
 	}
+
+	// ヘルスチェックの結果を取得
+	healthResponse, err := healthClient.Check(ctx, &healthgrpc.HealthCheckRequest{
+		Service: "", // デフォルトのヘルスチェックサービスを使用
+	})
+	if err != nil {
+		return fmt.Errorf("health check failed: %w", err)
+	}
+	fmt.Printf("Health check status: %s\n", healthResponse.Status.String())
 
 	return nil
 }
